@@ -1,6 +1,7 @@
 ﻿const puppeteer = require('puppeteer');
 const tmp = require("tmp");
 const fs = require('fs');
+const fileUrl = require('file-url');
 
 module.exports = async function (result, html) {
 
@@ -8,12 +9,15 @@ module.exports = async function (result, html) {
         postfix: ".html"
     });
 
-    await fs.writeFile(tempHtmlFile.name, html);
-
-    const browser = await puppeteer.launch();
+    await fs.writeFile(tempHtmlFile.name, html, (err) => {
+        if (err) throw err;
+        console.log('The file has been saved!');
+    });
+    
+    const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
     const page = await browser.newPage();
 
-    await page.goto(tempHtmlFile.name, {
+    await page.goto(fileUrl(tempHtmlFile.name), {
         waitUntil: 'networkidle2'
     });
 
