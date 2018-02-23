@@ -5,6 +5,12 @@ Sample app to generate a pdf from HTML using headless Chrome in ASP.NET Core.
 ## To run
 
 ```
+dotnet run
+```
+
+## To run in Docker
+
+```
 docker-compose build
 ```
 
