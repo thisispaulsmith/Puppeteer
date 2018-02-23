@@ -1,0 +1,22 @@
+﻿@model Puppeteer.Models.PdfModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create PDF</title>
+</head>
+<body>
+
+    <form asp-controller="Home" asp-action="Index" method="post">
+        <textarea asp-for="Html" cols="100" rows="20"></textarea><br />
+        <button type="submit">Generate PDF</button>
+        <input name="__RequestVerificationToken" type="hidden" value="<removed for brevity>" />
+    </form>
+
+</body>
+</html>

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.NodeServices;
+using Puppeteer.Models;
 
 namespace Puppeteer.Controllers
 {
@@ -16,10 +18,17 @@ namespace Puppeteer.Controllers
             _nodeServices = nodeServices;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var result = await _nodeServices.InvokeAsync<string>("./Node/pdf.js", "<h1>title</h1>");
-            return Content(result) ;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(PdfModel model)
+        {
+            var stream = await _nodeServices.InvokeAsync<Stream>("./Node/pdf.js", model.Html);
+
+            return File(stream, "application/pdf");
         }
     }
 }

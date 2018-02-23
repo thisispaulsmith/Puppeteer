@@ -11,7 +11,11 @@ namespace Puppeteer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddNodeServices();
+            services.AddNodeServices(options => {
+                options.InvocationTimeoutMilliseconds = 300000;
+                options.LaunchWithDebugging = true;
+                options.DebuggingPort = 9229;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

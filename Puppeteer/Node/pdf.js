@@ -1,17 +1,37 @@
 ﻿const puppeteer = require('puppeteer');
+const tmp = require("tmp");
+const fs = require('fs');
 
-module.exports = function (callback, html) {
+module.exports = async function (result, html) {
 
-    puppeteer.launch({
-        headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox']
-    }).then(browser => {
-        browser.newPage()
-            .then(page => page.goTo("https://www.google.com"))
-            .then(response => response.pdf({ path: 'c:\hn.pdf', format: 'A4' }));
+    var tempHtmlFile = tmp.fileSync({
+        postfix: ".html"
     });
-    
-    //page.goTo("https://www.google.com");
-    //page.pdf({ path: 'hn.pdf', format: 'A4' });
 
-    callback(/* error */ null, html);
+    await fs.writeFile(tempHtmlFile.name, html);
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    await page.goto(tempHtmlFile.name, {
+        waitUntil: 'networkidle2'
+    });
+
+    var name = tmp.tmpNameSync() + ".pdf";
+
+    await page.pdf({
+        path: name,
+        format: 'A4',
+        margin: {
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0
+        }
+    });
+
+    await browser.close();
+
+    var read = fs.createReadStream(name);
+    read.pipe(result.stream);
 };
