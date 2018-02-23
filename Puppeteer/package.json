@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {},
   "dependencies": {
-    "puppeteer": "^1.1.0"
+    "puppeteer": "^1.1.0",
+    "tmp": "0.0.33"
   }
 }
