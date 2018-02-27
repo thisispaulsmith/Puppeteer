@@ -30,7 +30,6 @@ RUN apt-get update && apt-get install -y wget gnupg2 pdftk --no-install-recommen
 ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 /usr/local/bin/dumb-init
 RUN chmod +x /usr/local/bin/dumb-init
 WORKDIR /app
-RUN npm install puppeteer@1.1.1 --save
 EXPOSE 80
 
 FROM microsoft/aspnetcore-build:2.0 AS build
@@ -44,6 +43,8 @@ RUN dotnet build -c Release -o /app
 
 FROM build AS publish
 RUN dotnet publish -c Release -o /app
+WORKDIR /app
+RUN npm install
 
 FROM base AS final
 WORKDIR /app

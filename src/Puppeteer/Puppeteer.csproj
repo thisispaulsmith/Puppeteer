@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Node\pdf.js">
+    <Content Include="Node\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PdfContent\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -39,7 +39,9 @@ async function writeFile(html) {
 }
 
 async function createBrowser() {
-    return await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+    return await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
 }
 
 function createPdfs(browser, pages) {
