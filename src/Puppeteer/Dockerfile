@@ -1,5 +1,4 @@
 FROM microsoft/aspnetcore:2.0 AS base
-
 # Install Nodejs
 ENV NODE_VERSION 9.5.0
 ENV NODE_DOWNLOAD_URL https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
@@ -17,7 +16,7 @@ RUN apt-get update && apt-get install -yq libgconf-2-4
 # Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
 # Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer
 # installs, work.
-RUN apt-get update && apt-get install -y wget gnupg2 --no-install-recommends \
+RUN apt-get update && apt-get install -y wget gnupg2 pdftk --no-install-recommends \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
@@ -30,23 +29,21 @@ RUN apt-get update && apt-get install -y wget gnupg2 --no-install-recommends \
 # It's a good idea to use dumb-init to help prevent zombie chrome processes.
 ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 /usr/local/bin/dumb-init
 RUN chmod +x /usr/local/bin/dumb-init
-
 WORKDIR /app
+RUN npm install puppeteer@1.1.1 --save
 EXPOSE 80
 
 FROM microsoft/aspnetcore-build:2.0 AS build
 WORKDIR /src
 COPY *.sln ./
-COPY Puppeteer/Puppeteer.csproj Puppeteer/
+COPY src/Puppeteer/Puppeteer.csproj src/Puppeteer/
 RUN dotnet restore
 COPY . .
-WORKDIR /src/Puppeteer
+WORKDIR /src/src/Puppeteer
 RUN dotnet build -c Release -o /app
 
 FROM build AS publish
 RUN dotnet publish -c Release -o /app
-WORKDIR /app
-RUN npm install
 
 FROM base AS final
 WORKDIR /app

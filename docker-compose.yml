@@ -5,4 +5,4 @@ services:
     image: puppeteer
     build:
       context: .
-      dockerfile: Puppeteer/Dockerfile
+      dockerfile: src/Puppeteer/Dockerfile

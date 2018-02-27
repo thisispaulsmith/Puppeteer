@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.0</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>5b9a4fa1-b859-4c75-af73-60519dd865e9</ProjectGuid>
+    <ProjectGuid>3687a37f-47dd-4fce-b15b-afd02390bd90</ProjectGuid>
     <DockerLaunchBrowser>True</DockerLaunchBrowser>
     <DockerServiceUrl>http://localhost:{ServicePort}</DockerServiceUrl>
     <DockerServiceName>puppeteer</DockerServiceName>
